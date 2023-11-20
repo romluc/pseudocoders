@@ -12,14 +12,23 @@ import Auth from '../utils/auth';
 
 function Header({currentPage, handlePageChange}) {
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAboutOpen, setIsAboutOpen] = useState(false);
+    const [isMenuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-        };
+        setMenuOpen(!isMenuOpen);
+    }
 
-        const closeMenu = () => {
-        setIsMenuOpen(false);
+    const closeMenu = () => {
+        setMenuOpen(false);
+    }
+
+    const toggleAbout = () => {
+        setIsAboutOpen(!isAboutOpen);
+    };
+
+    const closeAbout = () => {
+        setIsAboutOpen(false);
     };
 
     const user = Auth.getProfile();
@@ -31,13 +40,13 @@ function Header({currentPage, handlePageChange}) {
 
 
     return (
-        <div className='container'>
+        <div className='fluid p-4 mb-3'>
             <div className="row">
                 <div className='col-8 col-md-4 col-xl-2' >                                     
                         <img className='img-fluid' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
                 </div>
                                 
-                <ul className='nav nav-tabs col-lg-8 col-10 justify-content-end'>
+                <ul id='menu' className= {window.innerWidth > 992 ? 'nav nav-tabs col-lg-8 col-10 justify-content-end' :'nav bg-secondary text-decoration-none text-white flex-column float-right justify-content-end collapse'}>
                     <li className="nav-item">
                         <a href="#home" 
                         onClick={() => handlePageChange("Home")}
@@ -54,14 +63,14 @@ function Header({currentPage, handlePageChange}) {
                         <a
                         href="#about"
                         onClick={() => {
-                            toggleMenu();
+                            toggleAbout();
                             handlePageChange("About");
                         }}
                         className={`nav-link dropdown-toggle ${currentPage === "About" || currentPage === "Portfolio" ? "active" : ""}`}
                         >
                         About Me
                         </a>
-                        <div className={`dropdown-menu ${isMenuOpen ? 'show' : ''}`} aria-labelledby="aboutDropdown">
+                        <div className={`dropdown-menu ${isAboutOpen ? 'show bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
                         <a
                             href="#about"
                             onClick={() => {
@@ -125,6 +134,17 @@ function Header({currentPage, handlePageChange}) {
                         
                     )}
                 </ul>
+                
+                {window.innerWidth <= 992 && <button className="navbar-toggler btn btn-dark col" 
+                type="button"
+                onClick={()=>{toggleMenu()}} 
+                data-bs-toggle="collapse" 
+                data-bs-target="#menu" 
+                aria-controls="menu" 
+                aria-expanded="false" 
+                aria-label="Toggle navigation">
+                Menu
+                </button>}                
 
             {/* row */}
             </div > 
