@@ -5,8 +5,10 @@
 
 // when the portfolio is loaded for the first time, then the about me title and section are selected by default
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Auth from '../utils/auth';
+import {Button} from 'react-bootstrap';
+import LoginModal from './LoginModal';
 
 
 
@@ -14,6 +16,43 @@ function Header({currentPage, handlePageChange}) {
 
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const [isLoginOpen, setLoginOpen] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+
+    const aboutRef = useRef(null);
+    const loginRef = useRef(null);
+
+    const toggleLoginModal = () => {
+        setShowLoginModal(!showLoginModal);
+    }
+
+    const closeLoginModal = () => setShowLoginModal(false);
+
+    useEffect(()=>{
+        const handleOutsideClick = (event) => {
+            if(aboutRef.current && !aboutRef.current.contains(event.target)){
+                closeAbout();
+            }
+
+            if(loginRef.current && !loginRef.current.contains(event.target)){
+                closeLogin();
+            }
+        }
+
+        document.body.addEventListener('click', handleOutsideClick);
+
+        return ()=> {
+            document.body.removeEventListener('click', handleOutsideClick);
+        }
+    })
+    
+    const toggleLogin = () => {
+        setLoginOpen(!isLoginOpen);
+    }
+
+    const closeLogin = () => {
+        setLoginOpen(false)
+    }
 
     const toggleMenu = () => {
         setMenuOpen(!isMenuOpen);
@@ -59,7 +98,7 @@ function Header({currentPage, handlePageChange}) {
                         className={currentPage === "Pseudocodes" || currentPage === "Pseudocode" ? "active nav-link" : "nav-link"}
                         >Pseudocodes</a>
                     </li>
-                    <li className="nav-item dropdown ">
+                    <li className="nav-item dropdown " ref={aboutRef}>
                         <a
                         href="#about"
                         onClick={() => {
@@ -75,21 +114,21 @@ function Header({currentPage, handlePageChange}) {
                             href="#about"
                             onClick={() => {
                             handlePageChange("About");
-                            closeMenu();
+                            closeAbout();
                             }}
                             className={`dropdown-item ${currentPage === "About" ? "active" : ""}`}
                         >
-                            Who Am I
+                            <b>Who Am I</b>
                         </a>
                         <a
                             href="#portfolio"
                             onClick={() => {
                             handlePageChange("Portfolio");
-                            closeMenu();
+                            closeAbout();
                             }}
                             className={`dropdown-item ${currentPage === "Portfolio" ? "active" : ""}`}
                         >
-                            Portfolio
+                            <b>Portfolio</b>
                         </a>
                         </div>
                     </li>
@@ -125,16 +164,40 @@ function Header({currentPage, handlePageChange}) {
                         </li>
                     ) : (
                         
-                        <li className="nav-item">
-                        <a onClick={() => handlePageChange("login")}
-                        className='nav-link' >
+                        <li className="nav-item" ref={loginRef}>
+                        <a onClick={() => {
+                            toggleLogin();
+                        }}
+                        className={`nav-link dropdown-toggle ${currentPage === "Login" || currentPage === "Signup" ? "active" : ""}`} >
                         Login/Signup
                         </a>
+                        <div className={`dropdown-menu ${isLoginOpen ? 'show bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
+                        <a 
+                        className='dropdown-item'
+                        onClick={()=>{
+                            toggleLoginModal();
+                        }}
+                        >
+                            <b>Login</b>
+                        </a>
+                        <LoginModal show={showLoginModal} handleClose={closeLoginModal} />
+                        <a
+                            href="#signup"
+                            onClick={() => {
+                            handlePageChange("Signup");
+                            closeLogin();
+                            }}
+                            className={`dropdown-item ${currentPage === "Signup" ? "active" : ""}`}
+                        >
+                            <b>Create Account</b>
+                        </a>
+                        </div>
                         </li>
                         
                     )}
                 </ul>
-                
+
+                        
                 {window.innerWidth <= 992 && <button className="navbar-toggler btn btn-dark col" 
                 type="button"
                 onClick={()=>{toggleMenu()}} 
