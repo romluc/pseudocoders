@@ -11,8 +11,7 @@ import Portfolio from '../pages/Portfolio';
 import Pseudocode from '../pages/Pseudocode';
 import Pseudocodes from '../pages/Pseudocodes';
 import Resume from '../pages/Resume';
-import Login from '../pages/Login';
-import Signup from '../pages/Signup';
+
 
 
 export default function Container() {
@@ -48,12 +47,7 @@ export default function Container() {
         }
         return <Dashboard />
       }
-      if (currentPage === "Login") {
-        return <Login currentPage={currentPage} handlePageChange={handlePageChange}/>
-      }
-      if (currentPage === "Signup") {
-        return <Signup currentPage={currentPage} handlePageChange={handlePageChange}/>
-      }
+      
     };
   
     const handlePageChange = (page) => setCurrentPage(page);

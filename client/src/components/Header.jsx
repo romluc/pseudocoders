@@ -7,7 +7,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Auth from '../utils/auth';
-import {Button} from 'react-bootstrap';
+import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
 
 
@@ -18,13 +18,21 @@ function Header({currentPage, handlePageChange}) {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [isLoginOpen, setLoginOpen] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showSignupModal, setShowSignupModal] = useState(false);
 
     const aboutRef = useRef(null);
     const loginRef = useRef(null);
+    const menuRef = useRef(null);
 
     const toggleLoginModal = () => {
         setShowLoginModal(!showLoginModal);
     }
+
+    const toggleSignupModal = () => {
+        setShowSignupModal(!showSignupModal);
+    }
+
+    const closeSignupModal = () => setShowSignupModal(false);
 
     const closeLoginModal = () => setShowLoginModal(false);
 
@@ -33,9 +41,11 @@ function Header({currentPage, handlePageChange}) {
             if(aboutRef.current && !aboutRef.current.contains(event.target)){
                 closeAbout();
             }
-
             if(loginRef.current && !loginRef.current.contains(event.target)){
                 closeLogin();
+            }
+            if(menuRef.current && !menuRef.current.contains(event.target)){
+                closeMenu();
             }
         }
 
@@ -82,10 +92,10 @@ function Header({currentPage, handlePageChange}) {
         <div className='fluid p-4 mb-3'>
             <div className="row">
                 <div className='col-8 col-md-4 col-xl-2' >                                     
-                        <img className='img-fluid' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
+                        <img id='logo' className='img-fluid' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
                 </div>
                                 
-                <ul id='menu' className= {window.innerWidth > 992 ? 'nav nav-tabs col-lg-8 col-10 justify-content-end' :'nav bg-secondary text-decoration-none text-white flex-column float-right justify-content-end collapse'}>
+                <ul id='menu' ref={menuRef} className= {window.innerWidth > 992 ? 'nav nav-tabs col-lg-8 col-10 justify-content-end' :'nav bg-secondary text-decoration-none text-white flex-column float-right justify-content-end collapse'}>
                     <li className="nav-item">
                         <a href="#home" 
                         onClick={() => handlePageChange("Home")}
@@ -182,15 +192,14 @@ function Header({currentPage, handlePageChange}) {
                         </a>
                         <LoginModal show={showLoginModal} handleClose={closeLoginModal} />
                         <a
-                            href="#signup"
-                            onClick={() => {
-                            handlePageChange("Signup");
-                            closeLogin();
-                            }}
-                            className={`dropdown-item ${currentPage === "Signup" ? "active" : ""}`}
+                        className='dropdown-item'
+                        onClick={()=>{
+                            toggleSignupModal();
+                        }}    
                         >
                             <b>Create Account</b>
                         </a>
+                        <SignupModal show={showSignupModal} handleClose={closeSignupModal} />
                         </div>
                         </li>
                         
@@ -198,8 +207,9 @@ function Header({currentPage, handlePageChange}) {
                 </ul>
 
                         
-                {window.innerWidth <= 992 && <button className="navbar-toggler btn btn-dark col" 
+                {window.innerWidth <= 992 && <button className="btn btn-dark col" 
                 type="button"
+                id='menuTogglerBtn'
                 onClick={()=>{toggleMenu()}} 
                 data-bs-toggle="collapse" 
                 data-bs-target="#menu" 

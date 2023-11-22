@@ -42,6 +42,10 @@ const resolvers = {
     addUser: async (parent, { name, email, password }) => {
       const user = await User.create({ name, email, password });
       const token = signToken(user);
+
+      if(!user){
+        throw AuthenticationError;
+      }
       return { token, user };
     },    
     login: async (parent, { email, password }) => {
