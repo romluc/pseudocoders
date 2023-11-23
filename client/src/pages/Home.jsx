@@ -2,11 +2,13 @@
 
 export default function Home(message) {
 
+    
+
     return (
         <div className="container">
             <div className="row">
                 <div className="col">
-                    {message === 'access_denied' && <p>You don't have access to this page.</p>}
+                    {message === 'access_denied' && <p>You don't have access to this page, you trouble maker!</p>}
 
                     <h2>Welcome to Pseudocoders</h2>
 

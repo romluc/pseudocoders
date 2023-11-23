@@ -9,16 +9,17 @@ const SignupModal = ({show, handleClose}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [signup, {error, data}]= useMutation(ADD_USER);
+    const [addUser, {error, data}]= useMutation(ADD_USER);
 
     const handleSignup = async(e) => {
         e.preventDefault();
 
         try{
-            const {data} = await signup({
-                variables: (name, email, password)
+            const {data} = await addUser({
+                variables: {name, email, password}
             });
-            Auth.login(data.signup.token);
+            console.log({data});
+            Auth.login(data.addUser.token);
 
         }catch(err){
             console.error(err);
