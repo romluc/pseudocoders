@@ -1,14 +1,18 @@
 // create home page
 
-export default function Home(message) {
 
-    
+
+export default function Home({username}) {
 
     return (
         <div className="container">
             <div className="row">
                 <div className="col">
-                    {message === 'access_denied' && <p>You don't have access to this page, you trouble maker!</p>}
+                    {/* {message === 'access_denied' && <p>You don't have access to this page, you trouble maker!</p>} */}
+
+                    {username && (
+                        <h2>Hello, {username}</h2>
+                    )}
 
                     <h2>Welcome to Pseudocoders</h2>
 
@@ -29,6 +33,7 @@ export default function Home(message) {
 
                     <p>Start exploring, start coding, and let's make the web a better place together!</p>
                 </div>
+                
             </div>
         </div>
     )

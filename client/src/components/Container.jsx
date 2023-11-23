@@ -11,11 +11,15 @@ import Portfolio from '../pages/Portfolio';
 import Pseudocode from '../pages/Pseudocode';
 import Pseudocodes from '../pages/Pseudocodes';
 import Resume from '../pages/Resume';
-
+import Auth from '../utils/auth';
 
 
 export default function Container() {
     const [currentPage, setCurrentPage] = useState('Home');
+
+    const user = Auth.getProfile()?.data;
+    const username = user?.name;
+    const userEmail = user?.email;
   
     // This method is checking to see what the value of `currentPage` is. Depending on the value of currentPage, we return the corresponding component to render.
     const renderPage = () => {
@@ -32,7 +36,7 @@ export default function Container() {
         return <Resume />
       }
       if (currentPage === "Home") {
-        return <Home />;
+        return <Home username={username} />;
       }
       if (currentPage === "Pseudocodes") {
         return <Pseudocodes />
@@ -55,7 +59,7 @@ export default function Container() {
     return (
       <div>
 
-        <Header currentPage={currentPage} handlePageChange={handlePageChange} />
+        <Header currentPage={currentPage} handlePageChange={handlePageChange} username={username} userEmail={userEmail} />
 
         <main className='container'>
           <div className="row">

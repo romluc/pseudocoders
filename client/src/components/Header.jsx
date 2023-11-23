@@ -12,7 +12,7 @@ import LoginModal from './LoginModal';
 
 
 
-function Header({currentPage, handlePageChange}) {
+function Header({currentPage, handlePageChange, username, userEmail}) {
 
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -24,6 +24,7 @@ function Header({currentPage, handlePageChange}) {
     const loginRef = useRef(null);
     const menuRef = useRef(null);
 
+    
     const toggleLoginModal = () => {
         setShowLoginModal(!showLoginModal);
     }
@@ -119,7 +120,7 @@ function Header({currentPage, handlePageChange}) {
                         >
                         About Me
                         </a>
-                        <div className={`dropdown-menu ${isAboutOpen ? 'show bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
+                        <div className={`dropdown-menu ${isAboutOpen ? 'show text-bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
                         <a
                             href="#about"
                             onClick={() => {
@@ -168,7 +169,8 @@ function Header({currentPage, handlePageChange}) {
                 
                 {Auth.loggedIn() ? (
                         <li className='nav-item'>
-                        <a onClick={logout}>
+                        <a onClick={logout}
+                        className='nav-item btn btn-primary'>
                             Logout
                         </a>
                         </li>
