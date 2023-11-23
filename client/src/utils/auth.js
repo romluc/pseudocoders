@@ -9,6 +9,14 @@ class AuthService {
     return null
   }
 
+  hasAccess(email){
+    const decoded = this.getProfile();
+    if(email == "leopoldogbp@gmail.com"){
+      return true
+    }
+    return false
+  }
+
   loggedIn() {
     const token = this.getToken();
     // If there is a token and it's not expired, return `true`

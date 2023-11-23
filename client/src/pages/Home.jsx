@@ -2,16 +2,16 @@
 
 
 
-export default function Home({username}) {
+export default function Home({message, username}) {
 
     return (
         <div className="container">
             <div className="row">
                 <div className="col">
-                    {/* {message === 'access_denied' && <p>You don't have access to this page, you trouble maker!</p>} */}
+                    {message === 'access_denied' && <p>You don't have access to this page, you trouble maker!</p>}
 
                     {username && (
-                        <h2>Hello, {username}</h2>
+                        <h2 style={{ marginBottom: '2rem' }}>Hello, {username}</h2>
                     )}
 
                     <h2>Welcome to Pseudocoders</h2>

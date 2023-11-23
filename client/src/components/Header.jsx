@@ -82,6 +82,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
     };
 
     const user = Auth.getProfile();
+    const isOwner = Auth.hasAccess(userEmail);
 
     const logout = (event) => {
     event.preventDefault();
@@ -156,7 +157,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                         >Resume</a>
                     </li>
                     
-                    {user && (user.data.isLeo && (
+                    {isOwner && (
                         <li className='nav-item'>
                             <a
                             href="#dashboard"
@@ -165,7 +166,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                             >Dashboard
                             </a>
                         </li>
-                    ))}
+                    )}
                 
                 {Auth.loggedIn() ? (
                         <li className='nav-item'>
@@ -218,7 +219,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                 aria-controls="menu" 
                 aria-expanded="false" 
                 aria-label="Toggle navigation">
-                Menu
+                {isMenuOpen ? 'Close Menu' : 'Menu'}
                 </button>}                
 
             {/* row */}

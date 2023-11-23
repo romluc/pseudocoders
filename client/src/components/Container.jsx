@@ -20,6 +20,7 @@ export default function Container() {
     const user = Auth.getProfile()?.data;
     const username = user?.name;
     const userEmail = user?.email;
+    const hasAccess = Auth.hasAccess(userEmail);
   
     // This method is checking to see what the value of `currentPage` is. Depending on the value of currentPage, we return the corresponding component to render.
     const renderPage = () => {
@@ -45,11 +46,11 @@ export default function Container() {
         return <Pseudocode />
       }
       if (currentPage === "Dashboard") {
-        if(!user.isLeo){
+        if(!hasAccess){
           setCurrentPage('Home');
           return <Home message='access_denied' />
         }
-        return <Dashboard />
+        return <Dashboard username={username} userEmail={userEmail}/>
       }
       
     };
