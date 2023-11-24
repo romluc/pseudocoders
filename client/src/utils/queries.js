@@ -40,6 +40,7 @@ export const QUERY_POSTS = gql`
       title
       content
       author
+      createdAt
     }
   }
 `;

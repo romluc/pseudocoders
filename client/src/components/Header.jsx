@@ -23,19 +23,17 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
     const aboutRef = useRef(null);
     const loginRef = useRef(null);
     const menuRef = useRef(null);
-
     
-    const toggleLoginModal = () => {
-        setShowLoginModal(!showLoginModal);
-    }
-
-    const toggleSignupModal = () => {
-        setShowSignupModal(!showSignupModal);
-    }
-
+    const toggleLoginModal = () => setShowLoginModal(!showLoginModal);
+    const toggleSignupModal = () => setShowSignupModal(!showSignupModal);    
     const closeSignupModal = () => setShowSignupModal(false);
-
     const closeLoginModal = () => setShowLoginModal(false);
+    const toggleLogin = () => setLoginOpen(!isLoginOpen);
+    const closeLogin = () => setLoginOpen(false);
+    const toggleMenu = () => setMenuOpen(!isMenuOpen);
+    const closeMenu = () => setMenuOpen(false);
+    const toggleAbout = () => setIsAboutOpen(!isAboutOpen);
+    const closeAbout = () => setIsAboutOpen(false); 
 
     useEffect(()=>{
         const handleOutsideClick = (event) => {
@@ -55,31 +53,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
         return ()=> {
             document.body.removeEventListener('click', handleOutsideClick);
         }
-    })
-    
-    const toggleLogin = () => {
-        setLoginOpen(!isLoginOpen);
-    }
-
-    const closeLogin = () => {
-        setLoginOpen(false)
-    }
-
-    const toggleMenu = () => {
-        setMenuOpen(!isMenuOpen);
-    }
-
-    const closeMenu = () => {
-        setMenuOpen(false);
-    }
-
-    const toggleAbout = () => {
-        setIsAboutOpen(!isAboutOpen);
-    };
-
-    const closeAbout = () => {
-        setIsAboutOpen(false);
-    };
+    })   
 
     const user = Auth.getProfile();
     const isOwner = Auth.hasAccess(userEmail);
@@ -91,7 +65,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
 
 
     return (
-        <div className='fluid p-4 mb-3'>
+        <div className='fluid p-4 mb-5 border-bottom border-secondary'>
             <div className="row">
                 <div className='col-8 col-md-4 col-xl-2' >                                     
                         <img id='logo' className='img-fluid' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
@@ -178,32 +152,33 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                     ) : (
                         
                         <li className="nav-item" ref={loginRef}>
-                        <a onClick={() => {
-                            toggleLogin();
-                        }}
-                        className={`nav-link dropdown-toggle ${currentPage === "Login" || currentPage === "Signup" ? "active" : ""}`} >
-                        Login/Signup
-                        </a>
-                        <div className={`dropdown-menu ${isLoginOpen ? 'show bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
-                        <a 
-                        className='dropdown-item'
-                        onClick={()=>{
-                            toggleLoginModal();
-                        }}
-                        >
-                            <b>Login</b>
-                        </a>
-                        <LoginModal show={showLoginModal} handleClose={closeLoginModal} />
-                        <a
-                        className='dropdown-item'
-                        onClick={()=>{
-                            toggleSignupModal();
-                        }}    
-                        >
-                            <b>Create Account</b>
-                        </a>
-                        <SignupModal show={showSignupModal} handleClose={closeSignupModal} />
-                        </div>
+                            <a onClick={() => {
+                                toggleLogin();
+                            }}
+                            className={`nav-link dropdown-toggle ${currentPage === "Login" || currentPage === "Signup" ? "active" : ""}`} >
+                            Login/Signup
+                            </a>
+
+                            <div className={`dropdown-menu ${isLoginOpen ? 'show bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
+                                <a 
+                                className='dropdown-item'
+                                onClick={()=>{
+                                    toggleLoginModal();
+                                }}
+                                >
+                                    <b>Login</b>
+                                </a>
+                                <LoginModal show={showLoginModal} handleClose={closeLoginModal} />
+                                <a
+                                className='dropdown-item'
+                                onClick={()=>{
+                                    toggleSignupModal();
+                                }}    
+                                >
+                                    <b>Create Account</b>
+                                </a>
+                                <SignupModal show={showSignupModal} handleClose={closeSignupModal} />
+                            </div>
                         </li>
                         
                     )}

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_POST } from "../utils/mutations";
 import {Modal, Button, Form} from 'react-bootstrap';
 
 
-const NewPost = (show, handleClose) => {
+const NewPostModal = ({show, onHide}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [addPost, {error, data}] = useMutation(ADD_POST);
@@ -23,7 +23,7 @@ const NewPost = (show, handleClose) => {
         setTitle('');
         setContent('');
 
-        handleClose();
+        onHide();
     }
 
     const handleEnterPress = (e) => {
@@ -41,7 +41,7 @@ const NewPost = (show, handleClose) => {
     });
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
                 <Modal.Title>New Pseudocode! Yay!</Modal.Title>
             </Modal.Header>
@@ -75,4 +75,4 @@ const NewPost = (show, handleClose) => {
 
 };
 
-export default NewPost;
+export default NewPostModal;

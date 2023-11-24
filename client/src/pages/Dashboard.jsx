@@ -1,50 +1,45 @@
 import React, {useState} from "react";
-import {useMutation} from '@apollo/client';
-import { ADD_POST } from "../utils/mutations";
-import Auth from "../utils/auth";
-import Home from "./Home";
+import { useQuery, useMutation } from "@apollo/client";
+import Auth from '../utils/auth';
+import { REMOVE_POST } from "../utils/mutations";
+import { QUERY_POSTS } from "../utils/queries";
+import NewPostModal from "../components/NewPostModal";
 
-function Dashboard(){
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+const Dashboard = ({username, userEmail}) => {
 
-    const [addPost, {error}]= useMutation(ADD_POST);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const {loading, error, data} = useQuery(QUERY_POSTS);
 
-    const user = Auth.getProfile();
+    const postArray = data?.post || [];
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const toggleModal = () => setModalOpen(!isModalOpen);
+    const closeModal = () => setModalOpen(false);
 
-        
-        try{
-            const {data} = await addPost({variables: {title, content}});
+    return (
+        <div>
+            <h2 className="mb-5 mt-3">Dashboard</h2>
 
-            if(data.addPost){
-                console.log('Post created: '. data.addPost);
-            }
-        } catch(err){
-            console.error("Error creating post:", err);
-        }
-    }
-
-    if (user.isLeo) {
-        return(
-            <div>
-                <h2>Dashboard</h2>
-                <p>Create a new post</p>
-                
-                <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="title" value="title" onChange={(e)=>setTitle(e.target.value)}/>
-                    <textarea name="content" value={content}
-                    onChange={(e)=>setContent(e.target.value)} cols="30" rows="10"></textarea>
-                    <button type="submit">Submit</button>
-                </form>
-                {error && <p>Error: {error.message}</p>}
+            <div className="row">
+                <h3 className="col-8">Latest Posts:</h3>
+                <button
+                className="col-4 btn btn-success"
+                onClick={toggleModal} >Create New Post</button>
+                {isModalOpen && <NewPostModal show={isModalOpen} onHide={closeModal} />}
             </div>
-        )
-    } else {
-        <Home message="access_denied" />
-    }
-}
+
+            <div>
+                {postArray.map((post) => (
+                    <div key={post._id} className="row">
+                        <h4 className="col-10">{post.title}</h4>
+                        <button className="col-2 btn btn-danger">U+1F5D1</button>
+                        <p>{post.createdAt}</p>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    )
+
+};
 
 export default Dashboard;
