@@ -10,6 +10,7 @@ const typeDefs = `
   }
 
   type Comment {
+    _id: ID!
     content: String!
     comments: [Comment]
     author: String!

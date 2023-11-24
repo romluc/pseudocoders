@@ -7,16 +7,15 @@ import {Modal, Button, Form} from 'react-bootstrap';
 const NewPostModal = ({show, onHide}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [addPost, {error, data}] = useMutation(ADD_POST);
+    const [addPost, {error}] = useMutation(ADD_POST);
 
     const handlePost = async(e) => {
-        e.preventDefault();
-
+        e.preventDefault();        
         try{
-            const {data} = await addPost({
+             await addPost({
                 variables: {title, content}
-            })
-        }catch(err){
+            })            
+        }catch(err){            
             console.error('Error: ', err);
         }
 

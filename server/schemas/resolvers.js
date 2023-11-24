@@ -66,10 +66,14 @@ const resolvers = {
     return { token, user };
     },
     addPost: async (parent, { title, content }, context) => {
+
+        console.log(context);
+        
         if (context.user) {
           const post = await Post.create({
             title,
-            content
+            content,
+            author: context.user._id
           });
   
           await User.findOneAndUpdate(
@@ -80,7 +84,7 @@ const resolvers = {
           return post;
         }
         throw AuthenticationError;
-        ('You need to be logged in!');
+        
     },
     removePost: async (parent, { postId }, context) => {
     if (context.user) {
@@ -110,8 +114,7 @@ const resolvers = {
         });
         return project;
     }
-    throw AuthenticationError;
-    ('You need to be logged in!');
+    throw AuthenticationError;    
     },
     removeProject: async (parent, { projectId }, context) => {
     if (context.user) {

@@ -36,7 +36,7 @@ export const ADD_POST = gql`
       createdAt
       comments {
         _id
-        commentText
+        content
       }
       author
     }
@@ -63,8 +63,8 @@ export const ADD_POST_COMMENT = gql`
   mutation addPostComment($postId: ID!, $commentText: String!) {
     addPostComment(postId: $postId, commentText: $commentText) {
       _id
-      commentText
-      commentAuthor
+      content
+      author
       createdAt
     }
   }
@@ -74,8 +74,8 @@ export const REMOVE_POST_COMMENT = gql`
   mutation removePostComment($postId: ID!, $commentId: ID!) {
     removePostComment(postId: $postId, commentId: $commentId) {
       _id
-      commentText
-      commentAuthor
+      content
+      author
       createdAt
     }
   }
