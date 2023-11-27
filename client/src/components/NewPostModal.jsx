@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { ADD_POST } from "../utils/mutations";
+import { QUERY_POSTS } from "../utils/queries";
 import {Modal, Button, Form} from 'react-bootstrap';
 
 
@@ -8,12 +9,14 @@ const NewPostModal = ({show, onHide}) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [addPost, {error}] = useMutation(ADD_POST);
+    const {refetch: refetchPosts} = useQuery(QUERY_POSTS);
 
     const handlePost = async(e) => {
         e.preventDefault();        
         try{
              await addPost({
-                variables: {title, content}
+                variables: {title, content},
+                onCompleted: () => refetchPosts()
             })            
         }catch(err){            
             console.error('Error: ', err);
@@ -57,6 +60,8 @@ const NewPostModal = ({show, onHide}) => {
                     <Form.Group>
                         <Form.Label>Content</Form.Label>
                         <Form.Control 
+                        as='textarea'
+                        rows={10}
                         type="text"
                         placeholder="Write away..."
                         value={content}

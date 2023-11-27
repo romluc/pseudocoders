@@ -50,7 +50,7 @@ export default function Container() {
           setCurrentPage('Home');
           return <Home message='access_denied' />
         }
-        return <Dashboard username={username} userEmail={userEmail}/>
+        return <Dashboard username={username}/>
       }
       
     };
