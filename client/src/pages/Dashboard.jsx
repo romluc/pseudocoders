@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import Auth from '../utils/auth';
 import { REMOVE_POST } from "../utils/mutations";
 import { QUERY_POSTS } from "../utils/queries";
 import NewPostModal from "../components/NewPostModal";

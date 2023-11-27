@@ -40,7 +40,7 @@ export default function Container() {
         return <Home username={username} />;
       }
       if (currentPage === "Pseudocodes") {
-        return <Pseudocodes />
+        return <Pseudocodes handlePageChange currentPage/>
       }
       if (currentPage === "Pseudocode") {
         return <Pseudocode />
