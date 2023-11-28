@@ -1,27 +1,27 @@
 import React, {useState, useEffect} from "react";
 import { useQuery } from "@apollo/client";
-import { QUERY_POSTS } from "../utils/queries";
+import { QUERY_POSTS, QUERY_USERS } from "../utils/queries";
 import OlderPostsModal from '../components/OlderPostsModal';
 
-const Pseudocodes = (currentPage, handlePageChange) => {
-    const {loading, error, data} = useQuery(QUERY_POSTS);
-    const [postArray, setPostArray] = useState([]);
-    const [olderPosts, setOlderPosts] = useState([]);
+const Pseudocodes = ({handlePageChange}) => {
+    const {loading: postsLoading, error: postsError, data: postsData} = useQuery(QUERY_POSTS);
+    const {loading: userLoading, error: userError, data: userData} = useQuery(QUERY_USERS);
+
+    const [postArray, setPostArray] = useState([]);    
     const [isModalOpen, setModalOpen] = useState(false);
-
+  
     useEffect(()=>{
-        if(!loading && data){
-            const posts = data?.posts || [];
-            setPostArray(posts.slice(0, 10));
-            setOlderPosts(posts.slice(10));
+        if(!postsLoading && postsData){
+            const posts = postsData?.posts || [];
+            setPostArray(posts.slice(0, 10));            
         }
-    }, [loading, data]);
+    }, [postsLoading, postsData]);
 
-    if(loading) {        
+    if(postsLoading || userLoading) {        
         return <div>Loading...</div>
     }
 
-    if(error){
+    if(postsError || userError){
         return <div>Error: {error.message}</div>
     }
 
@@ -38,14 +38,21 @@ const Pseudocodes = (currentPage, handlePageChange) => {
                         <button 
                         className="d-inline-block ms-auto btn btn-dark"
                         onClick={toggleModal}>Older Posts</button>
-                        {isModalOpen && <OlderPostsModal show={isModalOpen} onHide={closeModal} olderPosts handlePageChange currentPage/>}
+                        {isModalOpen && (<OlderPostsModal show={isModalOpen} onHide={closeModal} handlePageChange={handlePageChange}/>)}
                     </div>
 
-                    {postArray.map((post) => (
-                            <div key={post._id} className="row border-top border-secondary p-2">
-                                <h5 className="col-10">{post.title}</h5>
-                                <p className="col-10">{`${post.content.substring(0, 200)}${post.content.length > 200 ? '...' : ''}`}</p>
-                                <p>{post.createdAt}</p>
+                    {postArray.map((post) => (     
+                                            
+                            <div key={post._id} className="row border-top border-secondary p-2" >                                
+                                <h5 className="col-10 cursor-pointer"><a onClick={()=>handlePageChange('Pseudocode', post)}  >{post.title}</a></h5>
+                                <p className="col-10 cursor-pointer"><a onClick={()=>handlePageChange('Pseudocode', post)} >{`${post.content.substring(0, 200)}${post.content.length > 200 ? '...' : ''}`}</a></p>
+                                <p className="text-secondary">{
+                                    userData && userData.users.map((user)=>{
+                                        if(user._id === post.author){
+                                            return <span>Written by {user.name} at </span>
+                                        }
+                                    })
+                                    }{post.createdAt}</p>
                             </div>
                     ))}                   
                 </div>                                                           

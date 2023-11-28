@@ -28,19 +28,6 @@ const NewPostModal = ({show, onHide}) => {
         onHide();
     }
 
-    const handleEnterPress = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handlePost();
-        }
-    }
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleEnterPress);
-        return () => {
-            document.removeEventListener('keydown', handleEnterPress);
-        };
-    });
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -70,7 +57,7 @@ const NewPostModal = ({show, onHide}) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-            <Button variant='primary' onClick={handlePost}>
+                <Button variant='primary' onClick={handlePost}>
                     Publish it!
                 </Button>
             </Modal.Footer>

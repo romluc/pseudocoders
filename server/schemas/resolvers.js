@@ -6,8 +6,8 @@ const resolvers = {
     users: async () => {
       return User.find().populate('posts');
     },
-    user: async (parent, { email }) => {
-      return User.findOne({ email }).populate('posts');
+    user: async (parent, { userId }) => {
+      return User.findOne({ _id: userId }).populate('posts');
     },
     posts: async (parent, { author }) => {
       const params = author ? { author } : {};

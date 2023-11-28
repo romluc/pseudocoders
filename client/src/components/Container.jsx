@@ -16,11 +16,21 @@ import Auth from '../utils/auth';
 
 export default function Container() {
     const [currentPage, setCurrentPage] = useState('Home');
+    const [selectedPost, setSelectedPost] = useState(null);
+    
 
     const user = Auth.getProfile()?.data;
     const username = user?.name;
     const userEmail = user?.email;
     const hasAccess = Auth.hasAccess(userEmail);
+    const handlePageChange = (page, post) => {
+      setCurrentPage(page);
+
+      if(page === 'Pseudocode') {
+        setSelectedPost(post);
+       
+      }
+    }
   
     // This method is checking to see what the value of `currentPage` is. Depending on the value of currentPage, we return the corresponding component to render.
     const renderPage = () => {
@@ -40,10 +50,10 @@ export default function Container() {
         return <Home username={username} />;
       }
       if (currentPage === "Pseudocodes") {
-        return <Pseudocodes handlePageChange currentPage/>
+        return <Pseudocodes currentPage={currentPage} handlePageChange={handlePageChange}/>
       }
       if (currentPage === "Pseudocode") {
-        return <Pseudocode />
+        return <Pseudocode currentPage={currentPage} handlePageChange={handlePageChange} post={selectedPost} />
       }
       if (currentPage === "Dashboard") {
         if(!hasAccess){
@@ -53,9 +63,8 @@ export default function Container() {
         return <Dashboard username={username}/>
       }
       
-    };
-  
-    const handlePageChange = (page) => setCurrentPage(page);
+    };  
+    
   
     return (
       <div>
