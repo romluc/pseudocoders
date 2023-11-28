@@ -11,6 +11,8 @@
     border-radius: 5px;
 }
 
+
+
 @media (max-width: 992px){
     #menu a {
         color: lightgray;
