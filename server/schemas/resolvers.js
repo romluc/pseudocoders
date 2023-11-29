@@ -11,10 +11,10 @@ const resolvers = {
     },
     posts: async (parent, { author }) => {
       const params = author ? { author } : {};
-      return Post.find(params).sort({ createdAt: -1 }).populate('comments');
+      return Post.find(params).sort({ createdAt: -1 });
     },
     post: async (parent, { postId }) => {
-      return Post.findOne({ _id: postId });
+      return Post.findOne({ _id: postId }).populate('comments');
     },
     projects: async () => {      
       return Project.find().sort({ createdAt: -1 });
@@ -102,34 +102,11 @@ const resolvers = {
     }
     throw AuthenticationError;
     },
-    addProject: async (parent, { name, imgSrc, alt, page, techs, repo }, context) => {
-    if (context.user) {
-        const project = await Project.create({
-        name,
-        imgSrc,
-        alt, 
-        page,
-        techs, 
-        repo
-        });
-        return project;
-    }
-    throw AuthenticationError;    
-    },
-    removeProject: async (parent, { projectId }, context) => {
-    if (context.user) {
-        const project = await Project.findOneAndDelete({
-        _id: projectId
-        });
 
-        return project;
-    }
-    throw AuthenticationError;
-    },
-    addPostComment: async (parent, { postId, commentText }, context) => {
+    addPostComment: async (parent, { postId, content }, context) => {
         if (context.user) {
             const comment = await Comment.create({
-                content: commentText, 
+                content: content, 
                 author: context.user._id});
 
           await Post.findOneAndUpdate(
@@ -172,10 +149,10 @@ const resolvers = {
         }
         throw AuthenticationError;
     }, 
-    addCommentComment: async (parent, { COMMENT_Id, commentText }, context) => {
+    addCommentComment: async (parent, { COMMENT_Id, content }, context) => {
     if (context.user) {
         const comment = await Comment.create({
-            content: commentText, 
+            content: content, 
             author: context.user._id});
 
         await Comment.findOneAndUpdate(

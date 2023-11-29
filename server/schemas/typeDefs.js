@@ -66,9 +66,9 @@ const typeDefs = `
     removePost(postId: ID!): Post
     addProject(name: String!, imgSrc: String!, alt: String!, page: String!, techs: String!, repo: String!): Project
     removeProject(projectId: ID!): Project
-    addPostComment(postId: ID!, commentText: String!): Post
+    addPostComment(postId: ID!, content: String!): Post
     removePostComment(postId: ID!, commentId: ID!): Post
-    addCommentComment(COMMENT_Id: ID!, commentText: String!): Comment
+    addCommentComment(COMMENT_Id: ID!, content: String!): Comment
     removeCommentComment(COMMENT_Id: ID!, commentId: ID!): Comment
 
   }
