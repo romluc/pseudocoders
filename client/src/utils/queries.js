@@ -57,30 +57,6 @@ export const QUERY_SINGLE_POST = gql`
         _id
         content
         author
-        comments {
-          _id
-          content
-          author
-          comments {
-            _id
-            content
-            author
-            comments {
-              _id
-              content
-              author
-              comments {
-                _id
-                content
-                author
-                createdAt
-              }
-              createdAt
-            }
-            createdAt
-          }
-          createdAt
-        }
         createdAt
       }
     }

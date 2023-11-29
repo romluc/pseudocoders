@@ -49,7 +49,7 @@ const Pseudocodes = ({handlePageChange}) => {
                                 <p className="text-secondary">{
                                     userData && userData.users.map((user)=>{
                                         if(user._id === post.author){
-                                            return <span>Written by {user.name} at </span>
+                                            return <span>{user.name} at </span>
                                         }
                                     })
                                     }{post.createdAt}</p>

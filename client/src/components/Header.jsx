@@ -84,7 +84,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                         className={currentPage === "Pseudocodes" || currentPage === "Pseudocode" ? "active nav-link" : "nav-link"}
                         >Pseudocodes</a>
                     </li>
-                    <li className="nav-item dropdown " ref={aboutRef}>
+                    <li className="nav-item dropdown" ref={aboutRef}>
                         <a
                         href="#about"
                         onClick={() => {

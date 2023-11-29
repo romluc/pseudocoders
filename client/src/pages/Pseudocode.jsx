@@ -2,20 +2,16 @@
 // To do
 
 /* 
-    The Comments are being added to the posts without errors and brought back through query-single-post. 
-
-    The next step is to make them render at the bottom of the page and add a reply button to open a
-    textarea and allow users to add comments inside comments.
-
-    The app will not be complete until we are able to see users arguing. It's gonna be fun.
+    Comments and comment form hide and show at the click of designated buttons. 
+    Do the same on comment reply forms. (create a state and add a onClick listener to toggle
+    the state on the button)
 */
 
 
 /* 
-    Create a mutation to delete and edit post comments. (an update comment feature will have to be
-    created from the very beggining. Have fun.)
-
-    Create a mutation to add, delete and edit comments on comments.
+    Buttons to send comments and replies were created. But they do not call the mutations
+    to make them work. Create the functions to call the mutations and add them
+    as onClick event listeners. Check if the desired mutations were defined on the back and frontend.
 */
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +19,7 @@
 
 import React, { useEffect, useState } from "react"
 import { useQuery, useMutation } from "@apollo/client"
-import { QUERY_USER, QUERY_SINGLE_POST } from "../utils/queries"
+import { QUERY_USER, QUERY_SINGLE_POST, QUERY_USERS } from "../utils/queries"
 import { ADD_POST_COMMENT, REMOVE_POST_COMMENT } from "../utils/mutations";
 
 export default function Pseudocode({handlePageChange, post}){
@@ -33,11 +29,12 @@ export default function Pseudocode({handlePageChange, post}){
     // states section
 
     const [commentInputValue, setCommentInputValue] = useState('');
-    const [authorData, setAuthorData] = useState(null);
+    const [postAuthorData, setPostAuthorData] = useState(null);
+    const [commentAuthorData, setCommentAuthorData] = useState(null);
     const [postData, setPostData] = useState(null);
-    
-    const [postObj, setPostObj] = useState({});
-    const [authorObj, setAuthorObj] = useState({});
+    const [visitorsData, setVisitorsData] =useState(null);
+    const [showComments, setShowComments] = useState(false);
+    const [showCommentForm, setShowCommentForm] = useState(false);
 
     /////////////////////////////////////////////////////////////////////////////////
 
@@ -46,11 +43,17 @@ export default function Pseudocode({handlePageChange, post}){
     /////////////////////////////////////////////////////////////////////////////////
     // Queries section
 
+    // query all users to print comment authors
+
+    const {loading: visitorLoading, error: visitorError} = useQuery(QUERY_USERS, {
+        onCompleted: (data)=> setVisitorsData(data)
+    })
+
     // query single user from id
 
-    const {loading: authorLoading, error: authorError} = useQuery(QUERY_USER,{
+    const {loading: postAuthorLoading, error: postAuthorError} = useQuery(QUERY_USER,{
         variables: {userId: post.author},
-        onCompleted: (data) => setAuthorData(data)
+        onCompleted: (data) => setPostAuthorData(data)
     });
 
 
@@ -79,9 +82,9 @@ export default function Pseudocode({handlePageChange, post}){
     /////////////////////////////////////////////////////////////////////////////////
     // Error handling section
 
-    if(authorError){
-        console.log('Error: ', authorError.message);
-        return <div>Error: {authorError.message}</div>
+    if(postAuthorError){
+        console.log('Error: ', postAuthorError.message);
+        return <div>Error: {postAuthorError.message}</div>
     }
 
     if(postError){
@@ -89,7 +92,7 @@ export default function Pseudocode({handlePageChange, post}){
         return <div>Error: {postError.message}</div>
     }
 
-    if(authorLoading || postLoading){
+    if(postAuthorLoading || postLoading){
         return <div>Loading...</div>
     } 
 
@@ -120,7 +123,7 @@ export default function Pseudocode({handlePageChange, post}){
     //////////////////////////////////////////////////////////////////////////////////
     // testing area. Console.log away, kid...
    
-
+    console.log(postData);
 
 
     /////////////////////////////////////////////////////////////////////////////////
@@ -139,28 +142,54 @@ export default function Pseudocode({handlePageChange, post}){
                         </React.Fragment>
                     ))}
                 </p>
-                <p className="text-secondary">{postData && (<span>Written by {authorObj.name} </span>)}at {post.createdAt}</p>
+                <p className="text-secondary">{postData && (<span>Written by {postAuthorData.user.name} </span>)}at {post.createdAt}</p>
             </div>
-            <div className="box">
-                <h5>Leave a Comment</h5>
-                <form>
-                    <textarea className="w-100"
-                     name="comment"
-                      id="commentInput"
-                       rows="5" 
-                       onChange={(e)=>setCommentInputValue(e.target.value)}
-                       value={commentInputValue}></textarea>
-                    <button
-                    className="btn btn-dark"
-                    onClick={handleSendComment} >Send Comment</button>
-                </form>
-            </div>
-            <div id="commentList">
-                {postObj.comments && postObj.comments.map(comment => (
-                    <div>
-                        <p>{comment.content || 'Failed fetching post comment'}</p>
-                    </div>
-                ))}
+            
+            <div id="commentArea">
+
+                <button className="btn btn-outline-dark"
+                id="showCommentsBtn"
+                type="button"
+                onClick={()=> setShowComments(!showComments)} >{postData && postData.post.comments.length} comments </button>
+
+
+                {showComments && (<div className="box" id='postCommentForm'>
+                    <h5 className="btn btn-outline-dark mt-4"
+                    onClick={()=>setShowCommentForm(!showCommentForm)} >Leave a Comment</h5>
+                    {showCommentForm && (<form>
+                        <textarea className="w-100"
+                        name="comment"
+                        id="commentInput"
+                        rows="5" 
+                        onChange={(e)=>setCommentInputValue(e.target.value)}
+                        value={commentInputValue}></textarea>
+                        <button
+                        className="btn btn-dark"
+                        onClick={handleSendComment} >Send Comment</button>
+                    </form>)}
+                </div>)}
+
+                {showComments && (<div className="border-top border-secondary mt-4" id='commentList'>
+                    {postData && postData.post.comments.map((comment) => (
+                        <div className="box border-bottom border-secondary p-4">
+                            {
+                                visitorsData && visitorsData.users.map((user)=>{
+                                    if(comment.author == user._id){
+                                        return <p><strong>{user.name}</strong> says:</p>
+                                    }
+                                })
+                                }
+                            <p className="ms-4">{comment.content}</p>
+                            <p className="ms-4"><span className="text-secondary ">{comment.createdAt}</span></p>
+                            <button className="btn btn-sm btn-outline-dark">Reply</button>
+                            <form>
+                                <textarea className="w-100 mt-2" rows="5"></textarea>
+                                <button className="btn btn-dark btn-sm">Send</button>
+                            </form>
+                        </div>
+                    ))}
+                </div>)}
+
             </div>
         </div>
         
