@@ -17,15 +17,6 @@ const typeDefs = `
     createdAt: String!
   }
 
-  type Project {
-    name: String!
-    imgSrc: String!
-    alt: String!
-    page: String!
-    techs: String!
-    repo: String!
-  }
-
   type Post {
     _id: ID!
     title: String!
@@ -47,15 +38,11 @@ const typeDefs = `
   type Query {
     users: [User]
     user(userId: ID!): User
-    postComments(postId: ID!): [Comment]
-    commentComments(COMMENT_Id: ID!): [Comment]
-    project(projectId: ID!): Project
-    projects: [Project]
+    comment(commentId: ID!): Comment
     posts(author: String): [Post]
     post(postId: ID!): Post
     me: User
   }
-
 
 
   
@@ -64,12 +51,10 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
     addPost(title: String!, content: String!): Post
     removePost(postId: ID!): Post
-    addProject(name: String!, imgSrc: String!, alt: String!, page: String!, techs: String!, repo: String!): Project
-    removeProject(projectId: ID!): Project
-    addPostComment(postId: ID!, content: String!): Post
-    removePostComment(postId: ID!, commentId: ID!): Post
-    addCommentComment(COMMENT_Id: ID!, content: String!): Comment
-    removeCommentComment(COMMENT_Id: ID!, commentId: ID!): Comment
+    addComment(postId: ID!, content: String!): Post
+    removeComment(postId: ID!, commentId: ID!): Post
+    addReply(COMMENT_Id: ID!, content: String!): Comment
+    removeReply(COMMENT_Id: ID!, commentId: ID!): Comment
 
   }
 `;

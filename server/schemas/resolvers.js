@@ -1,4 +1,4 @@
-const { User, Project, Comment, Post } = require('../models');
+const { User, Comment, Post } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -16,19 +16,8 @@ const resolvers = {
     post: async (parent, { postId }) => {
       return Post.findOne({ _id: postId }).populate('comments');
     },
-    projects: async () => {      
-      return Project.find().sort({ createdAt: -1 });
-    },
-    project: async (parent, { projectId }) => {
-      return Project.findOne({ _id: projectId });
-    },
-    commentComments: async (parent, {COMMENT_Id}) => {
-        const COMMENT = COMMENT_Id;
-        return Comment.find(COMMENT).sort({ createdAt: -1 }).populate('comments');
-    },
-    postComments: async (parent, {postId}) => {
-        const post = postId;
-        return Comment.find(post).sort({ createdAt: -1 }).populate('comments');
+    comment: async (parent, {commentId}) => {        
+        return Comment.findOne({_id: commentId}).populate('comments');
     },
     me: async (parent, args, context) => {
       if (context.user) {
@@ -103,7 +92,7 @@ const resolvers = {
     throw AuthenticationError;
     },
 
-    addPostComment: async (parent, { postId, content }, context) => {
+    addComment: async (parent, { postId, content }, context) => {
         if (context.user) {
             const comment = await Comment.create({
                 content: content, 
@@ -124,7 +113,7 @@ const resolvers = {
         }
         throw AuthenticationError;
     },
-    removePostComment: async (parent, { postId, commentId }, context) => {
+    removeComment: async (parent, { postId, commentId }, context) => {
         if (context.user) {
 
             const comment = await Comment.findOneAndDelete({
@@ -149,7 +138,7 @@ const resolvers = {
         }
         throw AuthenticationError;
     }, 
-    addCommentComment: async (parent, { COMMENT_Id, content }, context) => {
+    addReply: async (parent, { COMMENT_Id, content }, context) => {
     if (context.user) {
         const comment = await Comment.create({
             content: content, 
@@ -170,7 +159,7 @@ const resolvers = {
     }
     throw AuthenticationError;
     },
-    removePostComment: async (parent, { COMMENT_Id, commentId }, context) => {
+    removeReply: async (parent, { COMMENT_Id, commentId }, context) => {
         if (context.user) {
 
             const comment = await Comment.findOneAndDelete({
