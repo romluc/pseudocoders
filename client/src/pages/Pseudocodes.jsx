@@ -22,11 +22,13 @@ const Pseudocodes = ({handlePageChange}) => {
     }
 
     if(postsError || userError){
-        return <div>Error: {error.message}</div>
+        return <div>Error: {postsError.message || userError.message}</div>
     }
 
     const toggleModal = () => setModalOpen(!isModalOpen);
     const closeModal = () => setModalOpen(false);
+
+  
 
     return(
         <div>

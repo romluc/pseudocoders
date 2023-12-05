@@ -127,7 +127,7 @@ const resolvers = {
               $pull: {
                 comments: {
                   _id: commentId,
-                  author: context.user.name,
+                  author: context.user._id,
                 },
               },
             },
@@ -173,7 +173,7 @@ const resolvers = {
               $pull: {
                 comments: {
                   _id: commentId,
-                  author: context.user.name,
+                  author: context.user._id,
                 },
               },
             },

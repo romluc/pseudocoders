@@ -17,10 +17,13 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 
-import React, { useEffect, useState } from "react"
-import { useQuery, useMutation } from "@apollo/client"
-import { QUERY_USER, QUERY_SINGLE_POST, QUERY_USERS } from "../utils/queries"
-import { ADD_POST_COMMENT, REMOVE_POST_COMMENT } from "../utils/mutations";
+import React, { useState, useEffect } from "react"
+import { useQuery, useMutation, useSubscription } from "@apollo/client"
+import { QUERY_USER, QUERY_SINGLE_POST } from "../utils/queries"
+import { ADD_POST_COMMENT } from "../utils/mutations";
+import Comment from '../components/Comment.jsx'
+import Auth from '../utils/auth.js'
+
 
 export default function Pseudocode({handlePageChange, post}){
 
@@ -29,25 +32,16 @@ export default function Pseudocode({handlePageChange, post}){
     // states section
 
     const [commentInputValue, setCommentInputValue] = useState('');
-    const [postAuthorData, setPostAuthorData] = useState(null);
-    const [commentAuthorData, setCommentAuthorData] = useState(null);
+    const [postAuthorData, setPostAuthorData] = useState(null);    
     const [postData, setPostData] = useState(null);
-    const [visitorsData, setVisitorsData] =useState(null);
     const [showComments, setShowComments] = useState(false);
     const [showCommentForm, setShowCommentForm] = useState(false);
+ 
 
     /////////////////////////////////////////////////////////////////////////////////
-
-
-
+    /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     // Queries section
-
-    // query all users to print comment authors
-
-    const {loading: visitorLoading, error: visitorError} = useQuery(QUERY_USERS, {
-        onCompleted: (data)=> setVisitorsData(data)
-    })
 
     // query single user from id
 
@@ -56,7 +50,7 @@ export default function Pseudocode({handlePageChange, post}){
         onCompleted: (data) => setPostAuthorData(data)
     });
 
-
+    
     // query post info
 
     const {loading: postLoading, error: postError} = useQuery(QUERY_SINGLE_POST, {
@@ -64,21 +58,17 @@ export default function Pseudocode({handlePageChange, post}){
         onCompleted: (data) => setPostData(data)
     });
 
-    /////////////////////////////////////////////////////////////////////////////////
+    // function to query comment replies by COMMENT_Id.
 
-
-
+    
     /////////////////////////////////////////////////////////////////////////////////
     // Mutations section
 
-    // adds new post comment
+    const [addComment, {addCommentError, addCommentData}] = useMutation(ADD_POST_COMMENT);
 
-    const [addPostComment, {error, data}] = useMutation(ADD_POST_COMMENT);
-
-
+    
     /////////////////////////////////////////////////////////////////////////////////
-
-
+    /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     // Error handling section
 
@@ -97,44 +87,75 @@ export default function Pseudocode({handlePageChange, post}){
     } 
 
     /////////////////////////////////////////////////////////////////////////////////
-
-
+    /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     //Event handler functions section
+
+    
 
     // Send comment button
 
     const handleSendComment = async(e) =>{
+        
         e.preventDefault();
 
         try{
-            const {newCommentData} = await addPostComment({
+            const {newCommentData} = await addComment({
                 variables: {postId: postData.post._id, content: commentInputValue}
             })
 
+            let newComment = {
+                id: Math.random(),
+                author: Auth.getProfile()?.data?._id,
+                content: commentInputValue,
+                comments: [],
+                createdAt: 'Just posted'
+            }
+
+            setPostData((prevData) => ({
+                ...prevData,
+                post: {
+                    ...prevData.post,
+                    comments: [
+                        ...prevData.post.comments,
+                        newComment
+                    ]
+                }
+            }))
+
             setCommentInputValue('')
+           
         }catch(error){
             console.log('Error: ', error.message)
         }
     }
-    /////////////////////////////////////////////////////////////////////////////////
+  
 
-    
+   
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////    
     //////////////////////////////////////////////////////////////////////////////////
     // testing area. Console.log away, kid...
    
-    console.log(postData);
-
-
+    
     /////////////////////////////////////////////////////////////////////////////////
 
     return(
         <div id="containerDiv">
+
+            {/* 
+            /////////////////////////////////////////////////////////////////////////////////
+            POST ITSELF 
+            /////////////////////////////////////////////////////////////////////////////////
+            */}
+
             <div id='#postDiv' className="mb-4">
+                
                 <div id="postheader" className="mb-3 hstack"> 
                     <h2 className="d-inline-block">{post.title}</h2>
-                        <a href="#pseudocodes" onClick={()=> handlePageChange('Pseudocodes')} className="btn btn-dark ms-auto">Return to See Other Posts</a>
-                    </div>                
+                    <a href="#pseudocodes" onClick={()=> handlePageChange('Pseudocodes')} className="btn btn-dark ms-auto">Return to See Other Posts</a>
+                </div>
+
                 <p>{post.content.split('\n').map((line, index) => (
                         <React.Fragment key={index}>
                             {line}
@@ -142,22 +163,39 @@ export default function Pseudocode({handlePageChange, post}){
                         </React.Fragment>
                     ))}
                 </p>
-                <p className="text-secondary">{postData && (<span>Written by {postAuthorData.user.name} </span>)}at {post.createdAt}</p>
+                <p className="text-secondary">{postData?.user && postData?.user?.name && (<span>Written by {postAuthorData?.user?.name} </span>)}at {post?.createdAt}</p>
             </div>
             
             <div id="commentArea">
+                
+            {/* 
+            /////////////////////////////////////////////////////////////////////////////////
+            BUTTONS SHOW COMMENTS OR ADD A COMMENT
+            /////////////////////////////////////////////////////////////////////////////////
+            */}
 
-                <button className="btn btn-outline-dark"
-                id="showCommentsBtn"
-                type="button"
-                onClick={()=> setShowComments(!showComments)} >{postData && postData.post.comments.length} comments </button>
+                <div id="commentButtons" className="row">
+                    <button className="btn btn-outline-dark col-auto"
+                    id="showCommentsBtn"
+                    type="button"
+                    onClick={()=> setShowComments(!showComments)} 
+                    >
+                        {postData && postData.post.comments.length} comments 
+                    </button>
 
+                    <button className="btn btn-outline-dark col-auto ms-4"
+                    onClick={()=>setShowCommentForm(!showCommentForm)} >Leave a Comment</button>
+                    
+                </div>
+                
+            {/* 
+            /////////////////////////////////////////////////////////////////////////////////
+            COMMENT FORM (INITIALLY HIDDEN)
+            /////////////////////////////////////////////////////////////////////////////////
+            */}
 
-                {showComments && (<div className="box" id='postCommentForm'>
-                    <h5 className="btn btn-outline-dark mt-4"
-                    onClick={()=>setShowCommentForm(!showCommentForm)} >Leave a Comment</h5>
-                    {showCommentForm && (<form>
-                        <textarea className="w-100"
+                {showCommentForm && (<form>
+                        <textarea className="w-100 mt-4"
                         name="comment"
                         id="commentInput"
                         rows="5" 
@@ -167,26 +205,24 @@ export default function Pseudocode({handlePageChange, post}){
                         className="btn btn-dark"
                         onClick={handleSendComment} >Send Comment</button>
                     </form>)}
+
+                {showComments && (<div className="box" id='postCommentForm'>
+                    
                 </div>)}
 
-                {showComments && (<div className="border-top border-secondary mt-4" id='commentList'>
-                    {postData && postData.post.comments.map((comment) => (
-                        <div className="box border-bottom border-secondary p-4">
-                            {
-                                visitorsData && visitorsData.users.map((user)=>{
-                                    if(comment.author == user._id){
-                                        return <p><strong>{user.name}</strong> says:</p>
-                                    }
-                                })
-                                }
-                            <p className="ms-4">{comment.content}</p>
-                            <p className="ms-4"><span className="text-secondary ">{comment.createdAt}</span></p>
-                            <button className="btn btn-sm btn-outline-dark">Reply</button>
-                            <form>
-                                <textarea className="w-100 mt-2" rows="5"></textarea>
-                                <button className="btn btn-dark btn-sm">Send</button>
-                            </form>
-                        </div>
+                {/* 
+                /////////////////////////////////////////////////////////////////////////////////
+                COMMENTS (INITIALLY HIDDEN)
+                /////////////////////////////////////////////////////////////////////////////////
+                */}
+
+                {showComments && (<div className="mt-4" id='commentList'>
+                    {postData && postData?.post?.comments.map((comment) => (
+                        <Comment
+                        key={comment._id}
+                        comment={comment}
+                        postData={postData.post}
+                    />                        
                     ))}
                 </div>)}
 

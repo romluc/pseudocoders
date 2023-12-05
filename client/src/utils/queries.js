@@ -57,7 +57,7 @@ export const QUERY_SINGLE_POST = gql`
         _id
         content
         author
-        createdAt
+        createdAt        
       }
     }
   }
@@ -80,3 +80,20 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
+export const QUERY_COMMENT = gql`
+query comment($commentId: ID!){
+  comment(commentId: $commentId){
+    _id
+    content
+    author
+    createdAt
+    comments {
+      _id
+      content
+      author
+      createdAt      
+    }
+  }
+}
+`

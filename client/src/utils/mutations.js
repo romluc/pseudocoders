@@ -60,8 +60,8 @@ export const REMOVE_POST = gql`
 `;
 
 export const ADD_POST_COMMENT = gql`
-  mutation addPostComment($postId: ID!, $content: String!) {
-    addPostComment(postId: $postId, content: $content) {
+  mutation addComment($postId: ID!, $content: String!) {
+    addComment(postId: $postId, content: $content) {
       _id
       content
       author
@@ -71,8 +71,30 @@ export const ADD_POST_COMMENT = gql`
 `;
 
 export const REMOVE_POST_COMMENT = gql`
-  mutation removePostComment($postId: ID!, $commentId: ID!) {
-    removePostComment(postId: $postId, commentId: $commentId) {
+  mutation removeComment($postId: ID!, $commentId: ID!) {
+    removeComment(postId: $postId, commentId: $commentId) {
+      _id
+      content
+      author
+      createdAt
+    }
+  }
+`;
+
+export const ADD_REPLY = gql`
+mutation addReply($COMMENT_Id: ID!, $content: String!) {
+  addReply(COMMENT_Id: $COMMENT_Id, content: $content) {
+    _id
+    content
+    author
+    createdAt
+  }
+}
+`
+
+export const REMOVE_REPLY = gql`
+  mutation removeReply($COMMENT_Id: ID!, $commentId: ID!) {
+    removeReply(COMMENT_Id: $COMMENT_Id, commentId: $commentId) {
       _id
       content
       author
