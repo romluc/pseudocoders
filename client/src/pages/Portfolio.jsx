@@ -15,9 +15,9 @@ function Portfolio() {
                 <div className=" image-container position-relative">
                     <img src="images/DNA.jpeg" alt="Image of a DNA-ds structure." className="w-100"/>
                     <div className="overlay position-absolute top-50 start-50 w-100 h-100">
-                        <a href='https://leopoldogurgel.github.io/proteingenefinder/' className={`overlay-link translate-middle text-bg-light text-decoration-none rounded position-absolute top-0 ${window.innerWidth > 992 ? `mt-5` : ' '} start-50 border border-4 border-dark ${window.innerWidth > 992 ? "p-3" : 'p-1'}`} >Protein Gene Finder</a>
-                        <a className={`overlay-link translate-middle text-bg-light text-decoration-none rounded position-absolute top-50 start-50 ${window.innerWidth > 992 ? "p-3" : 'p-1'} border border-4 border-dark`} href="https://github.com/LeopoldoGurgel/proteingenefinder" >GitHub Repo</a>
-                        <p className={`overlay-text translate-middle text-bg-light rounded position-absolute start-50 ${window.innerWidth > 992 ? "p-3 bottom-0" : 'p-1 top-100'} border border-4 border-dark`}>JavaScript/ Bulma framework/ Third Party APIs</p>
+                        <a href='https://leopoldogurgel.github.io/proteingenefinder/' className={`overlay-link text-bg-light text-decoration-none rounded border border-4 border-dark `} >Protein Gene Finder</a>
+                        <a className={`overlay-link text-bg-light text-decoration-none rounded border border-4 border-dark`} href="https://github.com/LeopoldoGurgel/proteingenefinder" >GitHub Repo</a>
+                        <p className={`overlay-text text-bg-light rounded border border-4 border-dark`}>JavaScript/ Bulma framework/ Third Party APIs</p>
                     </div>
                 </div>  
             </div>
