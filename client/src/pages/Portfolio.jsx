@@ -1,17 +1,25 @@
 // create portfolio page
 
-import Project from "../components/Project"
+import Project from "../components/Project";
+import '../assets/styles.css'
+
+// if you need to add any new projects, there is a model of component with all the 
+// props that need to be passed.
 
 function Portfolio() {
     return (
         
-        <div className="portfolio">
-            <h2 className="title">Portfolio</h2>
-            <div  className="proj1">
-                <a href="https://leopoldogurgel.github.io/proteingenefinder/" ><p className="projTitle">Protein Gene Finder</p></a>
-                <a href="https://github.com/LeopoldoGurgel/proteingenefinder" className="githubRepo">GitHub Repo</a>
-                <p className="techs">JavaScript/ Bulma framework/ Third Party APIs</p>
-                <img src="images/DNA.jpeg" alt="Image of a DNA-ds structure."/>
+        <div className="portfolio container-xl row">
+            <h2 className="title mb-5">Portfolio</h2>
+            <div id='proj-1' className="container-fluid shadow-lg mb-5 p-3 position-relative  border border-2 border-dark rounded col-12">
+                <div className=" image-container position-relative">
+                    <img src="images/DNA.jpeg" alt="Image of a DNA-ds structure." className="w-100"/>
+                    <div className="overlay position-absolute top-50 start-50 w-100 h-100">
+                        <a href='https://leopoldogurgel.github.io/proteingenefinder/' className={`overlay-link translate-middle text-bg-light text-decoration-none rounded position-absolute top-0 ${window.innerWidth > 992 ? `mt-5` : ' '} start-50 border border-4 border-dark ${window.innerWidth > 992 ? "p-3" : 'p-1'}`} >Protein Gene Finder</a>
+                        <a className={`overlay-link translate-middle text-bg-light text-decoration-none rounded position-absolute top-50 start-50 ${window.innerWidth > 992 ? "p-3" : 'p-1'} border border-4 border-dark`} href="https://github.com/LeopoldoGurgel/proteingenefinder" >GitHub Repo</a>
+                        <p className={`overlay-text translate-middle text-bg-light rounded position-absolute start-50 ${window.innerWidth > 992 ? "p-3 bottom-0" : 'p-1 top-100'} border border-4 border-dark`}>JavaScript/ Bulma framework/ Third Party APIs</p>
+                    </div>
+                </div>  
             </div>
 
             <Project 
@@ -32,7 +40,7 @@ function Portfolio() {
             alt="Image of a clinic database app."
             />
 
-            <Project title="My Easy Notes" 
+            <Project title="My Easy Notes"
             page="https://myeasynotes-f5c4a6c5cb17.herokuapp.com/notes" 
             repo="https://github.com/LeopoldoGurgel/myeasynotes" 
             techs="Javascript / Express API" 
@@ -55,7 +63,7 @@ function Portfolio() {
             src="images/socialBackEnd.jpg" alt="Database being tested on Insomina app."
             />
 
-            <Project 
+            <Project
             title="My Easy Text Editor"
             page=" https://jate-main-emkatffzollheyw4ryao.herokuapp.com/"
             repo="https://github.com/LeopoldoGurgel/myEasyTextEditor"
@@ -63,13 +71,17 @@ function Portfolio() {
             src="images/JATE.jpg" alt="Image of a PWA text editor."
             />
 
-            {/* <Project 
-            title=
-            page=
-            repo=
-            techs=
-
-            /> */}
+            {/* 
+            
+            <Project 
+            className=''
+            title=''
+            page=''
+            repo=''
+            techs=''
+            /> 
+            
+            */}
         </div>
     )
 }
