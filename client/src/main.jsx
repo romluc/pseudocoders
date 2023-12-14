@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js'
 import 'jquery';
 import App from './App.jsx'
-import './assets/styles.css'
+
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(

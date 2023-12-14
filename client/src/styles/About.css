@@ -1,0 +1,11 @@
+#picOfMe {
+    width: 20%;
+    float: left;
+    padding: 10px;
+}
+
+@media (max-width: 992px) {
+    #picOfMe {
+        display: none;
+    }
+}

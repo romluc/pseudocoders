@@ -1,6 +1,6 @@
 // create Project component
 
-import '../assets/styles.css'
+import '../styles/Portfolio.css'
 
 function Project({title, page, repo, techs, src, alt}) {
     return(

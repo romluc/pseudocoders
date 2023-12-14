@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Auth from '../utils/auth';
 import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
+import '../styles/Header.css'
 
 
 
@@ -68,7 +69,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
         <div className='fluid p-4 mb-5 border-bottom border-secondary'>
             <div className="row">
                 <div className='col-8 col-md-4 col-xl-2' >                                     
-                        <img id='logo' className='img-fluid' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
+                        <img id='logo' className='img-fluid rounded' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
                 </div>
                                 
                 <ul id='menu' ref={menuRef} className= {window.innerWidth > 992 ? 'nav nav-tabs col-lg-8 col-10 justify-content-end' :'nav bg-secondary text-decoration-none text-white flex-column float-right justify-content-end collapse'}>
@@ -95,7 +96,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                         >
                         About Me
                         </a>
-                        <div className={`dropdown-menu ${isAboutOpen ? 'show text-bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
+                        <div className={`dropdown-menu ${isAboutOpen ? 'show text-bg-light border-4' : ''}`} aria-labelledby="aboutDropdown">
                         <a
                             href="#about"
                             onClick={() => {
@@ -104,7 +105,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                             }}
                             className={`dropdown-item ${currentPage === "About" ? "active" : ""}`}
                         >
-                            <b>Who Am I</b>
+                            Who Am I
                         </a>
                         <a
                             href="#portfolio"
@@ -114,21 +115,21 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                             }}
                             className={`dropdown-item ${currentPage === "Portfolio" ? "active" : ""}`}
                         >
-                            <b>Portfolio</b>
+                            Portfolio
                         </a>
-                        </div>
-                    </li>
-                    <li className="nav-item">
                         <a href="#contact" 
                         onClick={() => handlePageChange("Contact")}
-                        className={currentPage === "Contact" ? "active nav-link" : "nav-link"}
+                        className={`dropdown-item ${currentPage === "Contact" ? "active" : ""}`}
                         >Contact</a>
-                    </li>
-                    <li className="nav-item">
                         <a href="#resume" 
                         onClick={() => handlePageChange("Resume")}
-                        className={currentPage === "Resume" ? "active nav-link" : "nav-link"}
+                        className={`dropdown-item ${currentPage === "Resume" ? "active" : ""}`}
                         >Resume</a>
+                        </div>
+                    </li>
+
+                    <li className="nav-item">
+
                     </li>
                     
                     {isOwner && (
@@ -159,7 +160,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                             Login/Signup
                             </a>
 
-                            <div className={`dropdown-menu ${isLoginOpen ? 'show bg-secondary border-4' : ''}`} aria-labelledby="aboutDropdown">
+                            <div className={`dropdown-menu ${isLoginOpen ? 'show text-bg-light border-4' : ''}`} aria-labelledby="aboutDropdown">
                                 <a 
                                 className='dropdown-item'
                                 onClick={()=>{

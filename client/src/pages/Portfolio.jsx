@@ -1,7 +1,7 @@
 // create portfolio page
 
 import Project from "../components/Project";
-import '../assets/styles.css'
+import '../styles/Portfolio.css'
 
 // if you need to add any new projects, there is a model of component with all the 
 // props that need to be passed.
