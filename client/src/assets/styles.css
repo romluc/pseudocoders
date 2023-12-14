@@ -62,11 +62,22 @@
         margin: 1em 
     }
 
+
+
 }
 
 @media (min-width: 1200px){
     #menu {
         font-size: 1.2em;
+    }
+
+    .container-xl {
+        display: flex;
+        justify-content: space-between;   
+    }
+
+    .smaller {
+        width: 48%;
     }
 }
 

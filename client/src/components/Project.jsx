@@ -4,7 +4,7 @@ import '../assets/styles.css'
 
 function Project({title, page, repo, techs, src, alt}) {
     return(
-        <div  className={`shadow-lg mb-5 p-3 position-relative border border-2 border-dark rounded ${window.innerWidth > 992 ? 'col-5 mx-auto' : ''}`}>
+        <div  className={`smaller shadow-lg mb-5 p-3 position-relative border border-2 border-dark rounded`}>
             <div className="image-container position-relative">
                 <img src={src} alt={alt} className="w-100 "/>
                 <div className= {`overlay position-absolute top-50 start-50 w-100 h-100`}>
