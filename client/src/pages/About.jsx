@@ -7,7 +7,7 @@ export default function About(){
         <div>
             <h2 className="mb-5">About Me</h2>
             <div>
-                <img id='picOfMe' src="../../images/picofme1.jpg" alt="The portrait of a very handsome young man who happens to be the developer of this webpage. He is taken. Sorry." />
+                <img id='picOfMe' src="images/picofme1.jpg" alt="The portrait of a very handsome young man who happens to be the developer of this webpage. He is taken. Sorry." />
                 <p>Hello, there!</p>
                 <p>My name is Leopoldo Gurgel. I was born in Brazil, married since 2014 and father 
                 of a 4yo jedi knight. From 2012 to 2022, I have been working on a stressful helthcare 
