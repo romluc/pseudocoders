@@ -18,7 +18,7 @@ export default function Resume(){
             <a href="resume/Leopoldo'sResume.pdf" className='btn btn-outline-primary' download>Download the PDF file.</a>
 
             <h4 className='mb-3 mt-4'>Carrer Objective</h4>
-            <p className='mb-4'>Self-motivated team member and avid learner, I want to as a Web Developer to apply my skills and understanding of both front and back-end web development to achieve client requirements and outmatch their expectations. Highly skilled in communication, collaboration and technical communication. Passionate about sharing knowledge and contributing to a positive team environment.</p>
+            <p className='mb-4'>Self-motivated team member and avid learner, I want to apply my skills and understanding of both front and back-end web development to achieve client requirements and outmatch their expectations. Highly skilled in technical communication and passionate about sharing knowledge while contributing to a positive team environment.</p>
 
             <h4 className='mb-3'>Education</h4>
             <ul className='mb-5'>
