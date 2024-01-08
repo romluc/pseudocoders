@@ -9,6 +9,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Auth from '../utils/auth';
 import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
+import VerifyEmailModal from './verifyEmailModal';
 import '../styles/Header.css'
 
 
@@ -20,17 +21,25 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
     const [isLoginOpen, setLoginOpen] = useState(false);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSignupModal, setShowSignupModal] = useState(false);
+    const [showVerifyModal, setShowVerifyModal] = useState(false);
+    const [accOpen, setAccOpen] = useState(false);
 
     const aboutRef = useRef(null);
     const loginRef = useRef(null);
     const menuRef = useRef(null);
+    const accRef = useRef(null);
+
     
     const toggleLoginModal = () => setShowLoginModal(!showLoginModal);
-    const toggleSignupModal = () => setShowSignupModal(!showSignupModal);    
+    const toggleSignupModal = () => setShowSignupModal(!showSignupModal);
+    const toggleShowVerifyModal = () => setShowVerifyModal(!showVerifyModal);
+    const closeVerifyModal = () => setShowVerifyModal(false);    
     const closeSignupModal = () => setShowSignupModal(false);
     const closeLoginModal = () => setShowLoginModal(false);
     const toggleLogin = () => setLoginOpen(!isLoginOpen);
     const closeLogin = () => setLoginOpen(false);
+    const toggleAcc = () => setAccOpen(!accOpen);
+    const closeAcc = () => setAccOpen(false);
     const toggleMenu = () => setMenuOpen(!isMenuOpen);
     const closeMenu = () => setMenuOpen(false);
     const toggleAbout = () => setIsAboutOpen(!isAboutOpen);
@@ -47,6 +56,9 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
             if(menuRef.current && !menuRef.current.contains(event.target)){
                 closeMenu();
             }
+            if(accRef.current && !accRef.current.contains(event.target)){
+                closeAcc();
+            }
         }
 
         document.body.addEventListener('click', handleOutsideClick);
@@ -57,6 +69,7 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
     })   
 
     const user = Auth.getProfile();
+    
     const isOwner = Auth.hasAccess(userEmail);
 
     const logout = (event) => {
@@ -66,8 +79,8 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
 
 
     return (
-        <div className='fluid p-4 mb-5 border-bottom border-secondary'>
-            <div className="row">
+        <div className='fluid pt-4 pe-4 ps-4  mb-3 border-bottom border-secondary'>
+            <div className="row mb-3">
                 <div className='col-8 col-md-4 col-xl-2' >                                     
                         <img id='logo' className='img-fluid rounded' src="images/pseudocoderLogoCut.png" alt="Pseudocoder Logo" />
                 </div>
@@ -127,10 +140,6 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                         >Resume</a>
                         </div>
                     </li>
-
-                    <li className="nav-item">
-
-                    </li>
                     
                     {isOwner && (
                         <li className='nav-item'>
@@ -144,19 +153,35 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
                     )}
                 
                 {Auth.loggedIn() ? (
-                        <li className='nav-item'>
-                        <a onClick={logout}
-                        className='nav-item btn btn-primary'>
-                            Logout
+                        <li className='nav-item' ref={accRef}>
+                        <a onClick={()=>toggleAcc()}
+                          className='nav-link dropdown-toggle'>
+                              Your Account
                         </a>
-                        </li>
+                      
+                        <div className={`dropdown-menu ${accOpen ? 'show text-bg-light border-4' : ''}`} aria-labelledby="aboutDropdown">
+                        {!user.data.verified && <a 
+                          className='dropdown-item'
+                          onClick={()=>{
+                              toggleShowVerifyModal();
+                          }}
+                          >
+                              <b>Verify Your Account</b>
+                          </a>}
+                          <VerifyEmailModal show={showVerifyModal} handleClose={closeVerifyModal} />
+                          <a onClick={logout}
+                            className='dropdown-item text-danger'>
+                                Logout
+                            </a>
+                        </div>
+                      </li>
                     ) : (
                         
                         <li className="nav-item" ref={loginRef}>
                             <a onClick={() => {
                                 toggleLogin();
                             }}
-                            className={`nav-link dropdown-toggle ${currentPage === "Login" || currentPage === "Signup" ? "active" : ""}`} >
+                            className={`nav-link dropdown-toggle`} >
                             Login/Signup
                             </a>
 
@@ -200,6 +225,15 @@ function Header({currentPage, handlePageChange, username, userEmail}) {
 
             {/* row */}
             </div > 
+            
+            {Auth.loggedIn() && <div>
+                {!user?.data.verified && <div className='alert alert-danger'>
+                    <p>You cannot leave comments because your email has not been verified.</p>
+                    <p>To verify your account click <a className='text-primary' onClick={() => toggleShowVerifyModal()}>here</a></p>
+                    <VerifyEmailModal show={showVerifyModal} handleClose={closeVerifyModal} />
+                </div>}
+            </div>}
+            
             
         {/* container */}
         </div>

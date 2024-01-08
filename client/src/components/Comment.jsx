@@ -27,7 +27,7 @@ const Comment = ({comment, postData}) => {
     ///////////////////////////////////////////////////////////////////////////
     // Define your states here
     const [showReply, setShowReply] = useState(false);
-    const [replyContent, setReplyContent] = useState({});
+    const [replyContent, setReplyContent] = useState('');
     const [visitorsData, setVisitorsData] = useState({});
     const [commentState, setCommentState] = useState({});
     const [deletedComments, setDeletedComments] = useState([]);
@@ -105,7 +105,7 @@ const Comment = ({comment, postData}) => {
                     ]
                 }
             }))
-
+            setShowReply(!showReply)
             setReplyContent('')
             console.log('Reply sent: ', data)
         } catch (error) {console.log("Error: ", error.message)}
@@ -150,7 +150,7 @@ const Comment = ({comment, postData}) => {
     // testing area. Console.log away, kid...
    
     // console.log(commentState)
-
+    
 
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
@@ -180,11 +180,11 @@ const Comment = ({comment, postData}) => {
                             </div>                            
                             <p className="ms-4">{comment.content}</p>
                             <p className="ms-4"><span className="text-secondary ">{comment.createdAt}</span></p>
-                            <button className="btn btn-sm btn-outline-dark"
-                            onClick={() => setShowReply(!showReply)} >Reply</button>
+                            {!showReply && <button className={"btn btn-sm btn-outline-dark"}
+                            onClick={() => setShowReply(!showReply)} >Reply</button>}
                             {showReply && (<form>
                                 <textarea className="w-100 mt-2" rows="1"
-                                value={replyContent}
+                                value= {replyContent}
                                 onChange={(e)=>setReplyContent(e.target.value)} ></textarea>
                                 <button className="btn btn-dark btn-sm"
                                 onClick={handleSendReply} >Send</button>

@@ -17,6 +17,15 @@ export const QUERY_USER = gql`
   }
 `;
 
+export const QUERY_VERIFICATION_TOKEN = gql`
+query verificationToken($userId: ID!){
+  verificationToken(userId: $userId){
+    _id
+    createdAt
+  }
+}
+`
+
 export const QUERY_USERS = gql`
   query users {
     users {

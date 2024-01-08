@@ -1,6 +1,6 @@
 const User = require("./User");
 const Post = require("./Post.js");
-const Project = require("./Project");
 const Comment = require("./Comment");
+const VerificationToken = require('./VerificationToken');
 
-module.exports = {User, Post, Project, Comment};
+module.exports = {User, Post, Comment, VerificationToken};

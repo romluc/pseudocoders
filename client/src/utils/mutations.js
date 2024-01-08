@@ -17,10 +17,11 @@ export const ADD_USER = gql`
   mutation addUser($name: String!, $email: String!, $password: String!) {
     addUser(name: $name, email: $email, password: $password) {
       token
+      createdAt
       user {
         _id
         name
-        email
+        email        
       }
     }
   }
@@ -104,3 +105,19 @@ export const REMOVE_REPLY = gql`
 `;
 
 
+export const VERIFY_EMAIL = gql`
+mutation verifyEmail($incomingPin: String!, $userId: ID!){
+  verifyEmail(incomingPin: $incomingPin, userId: $userId){
+    token
+    isMatched
+  }
+}
+`
+export const RESEND_VERIFICATION_EMAIL = gql`
+mutation resendVerificationEmail($userId: ID!){
+  resendVerificationEmail(userId: $userId){
+    message
+    createdAt
+  }
+}
+`

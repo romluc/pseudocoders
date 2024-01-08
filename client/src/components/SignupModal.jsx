@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import {Modal, Button, Form} from 'react-bootstrap';
 import Auth from '../utils/auth';
@@ -8,28 +8,27 @@ const SignupModal = ({show, handleClose}) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const [addUser, {error, data}]= useMutation(ADD_USER);
+       
+    const [addUser, {error, data}]= useMutation(ADD_USER);    
 
     const handleSignup = async(e) => {
         e.preventDefault();
-
+        
         try{
             const {data} = await addUser({
                 variables: {name, email, password}
             });
             console.log({data});
-            Auth.login(data.addUser.token);
-
+            Auth.login(data.addUser.token);            
+            localStorage.setItem('verificationStartTime', String(Date.now()));            
         }catch(err){
             console.error(err);
         }
 
         setName('');
         setEmail('');
-        setPassword('');
-    }
-
+        setPassword(''); 
+    };    
 
     return (
         <Modal show={show} onHide={handleClose}>
